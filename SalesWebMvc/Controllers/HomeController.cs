@@ -15,6 +15,8 @@ namespace SalesWebMvc.Controllers
 
 		public IActionResult Index()
 		{
+			//ViewData["Email"] = "dwesley011@gmail.com";
+			//ViewData["Nome"] = "David Wesley";
 			return View();
 		}
 
@@ -28,5 +30,5 @@ namespace SalesWebMvc.Controllers
 		{
 			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 		}
-	}
+	}	
 }
