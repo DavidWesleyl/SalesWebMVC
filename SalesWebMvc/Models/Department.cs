@@ -4,7 +4,7 @@ using System.Security.Principal;
 
 namespace SalesWebMvc.Models
 {
-    public class Department
+    public class Department // Classe Department
     {
         public int Id { get; set; }
         public string Name { get; set; }
