@@ -13,6 +13,10 @@ internal class Program
         // Add services to the container.
         builder.Services.AddControllersWithViews();
 
+        // Como apartir do .net 5 não tem o Startup.cs, para configurarmos um Seeding, terá que ser exatamente assim:
+
+        // 1 => primeiro o AddScopped
+
         builder.Services.AddScoped<SeedingService>(); 
 
         var app = builder.Build();
@@ -27,6 +31,9 @@ internal class Program
             app.UseHsts();
         }
 
+
+        // 2 => Depois o CreateScope, exatamente onde está esse.
+        // Essa seria a configuração no Startup.cs
         app.Services.CreateScope().ServiceProvider.GetRequiredService<SeedingService>().Seed();
 
 

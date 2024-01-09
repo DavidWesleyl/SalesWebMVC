@@ -23,6 +23,9 @@ namespace SalesWebMvc.Data
             }
 
 
+            // Observação: Para popular a base de dados no .Net 6 em diante, usando o SQL server, faremos as instancias e removeremos os parâmetros de ID de todas as Models
+            // Pois o Próprio banco de dados fará isso automaticamente. 
+
             Department d1 = new Department("Computers");
             Department d2 = new Department("Electronics");
             Department d3 = new Department("Fashion");
