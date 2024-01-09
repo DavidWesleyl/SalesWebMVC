@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using SalesWebMvc.Data;
 using SalesWebMvc.Models.ViewModels;
 using System.Diagnostics;
 
@@ -11,6 +12,8 @@ namespace SalesWebMvc.Controllers
 		public HomeController(ILogger<HomeController> logger)
 		{
 			_logger = logger;
+			
+			
 		}
 
 		public IActionResult Index()
@@ -28,5 +31,7 @@ namespace SalesWebMvc.Controllers
 		{
 			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 		}
-	}	
+
+      
+    }	
 }

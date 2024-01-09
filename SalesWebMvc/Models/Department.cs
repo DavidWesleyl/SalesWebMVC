@@ -12,9 +12,8 @@
             
         }
 
-        public Department(int id, string name)
+        public Department(string name)
         {
-            Id = id;
             Name = name;
         }
 
