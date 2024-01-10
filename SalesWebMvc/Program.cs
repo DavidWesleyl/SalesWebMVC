@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SalesWebMvc.Data;
+using SalesWebMvc.Services;
 
 internal class Program
 {
@@ -13,11 +14,14 @@ internal class Program
         // Add services to the container.
         builder.Services.AddControllersWithViews();
 
-        // Como apartir do .net 5 não tem o Startup.cs, para configurarmos um Seeding, terá que ser exatamente assim:
+        // Como apartir do .net 6 não tem o Startup.cs, para configurarmos um Seeding, terá que ser exatamente assim:
 
         // 1 => primeiro o AddScopped
 
-        builder.Services.AddScoped<SeedingService>(); 
+        builder.Services.AddScoped<SeedingService>();
+
+
+        builder.Services.AddScoped<SellerService>();
 
         var app = builder.Build();
 
