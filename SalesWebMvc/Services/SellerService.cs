@@ -1,6 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
+using Microsoft.EntityFrameworkCore;
 using SalesWebMvc.Data;
 using SalesWebMvc.Models;
+using SalesWebMvc.Services.Exceptions;
+using System.Data;
+
 
 namespace SalesWebMvc.Services
 {
@@ -11,17 +16,17 @@ namespace SalesWebMvc.Services
         public SellerService(SalesWebMvcContext context) // Injeção de dependencia
         {
             _context = context;
-            
+
         }
 
-        public List<Seller>FindAll() // Encontrar e mostrar a lista dos Vendedores do SQLServer
+        public List<Seller> FindAll() // Encontrar e mostrar a lista dos Vendedores do SQLServer
         {
             return _context.Seller.ToList(); // Retornar em formato de lista
 
         }
         public void Insert(Seller seller) // Adicionar vendedor ao banco de dados
         {
-            
+
             _context.Add(seller);
             _context.SaveChanges(); // Salvar alterações no banco de dados
         }
@@ -43,6 +48,46 @@ namespace SalesWebMvc.Services
 
 
 
-         
+        public void Update(Seller vendedor) // Método Update | Atualizar informações do Vendedor no Banco de Dados
+        {
+            if(!_context.Seller.Any(x => x.Id == vendedor.Id))
+            {
+                throw new NotFoundException("Id notfound");
+
+            }
+
+            try
+            {
+                _context.Update(vendedor);
+                _context.SaveChanges();
+
+            }
+
+            catch(DbUpdateConcurrencyException exception)
+            {
+                throw new DbConcurrencyException(exception.Message);
+            }
+
+            
+        }
+
+
+
+
+
+
+
+
+
+
+      
+
+
+
+            
+
+            
+        }
+
     }
-}
+
