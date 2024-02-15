@@ -1,7 +1,9 @@
  using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore;
 using SalesWebMvc.Data;
 using SalesWebMvc.Services;
+using System.Globalization;
 
 internal class Program
 {
@@ -21,26 +23,48 @@ internal class Program
         builder.Services.AddScoped<SeedingService>();
 
 
-        builder.Services.AddScoped<SellerService>();
+        builder.Services.AddScoped<SellerService>() ;
 
         builder.Services.AddScoped<DepartmentService>();
 
         var app = builder.Build();
 
+        // Configuração de Idioma do Sistema
+
+        var enUS = new CultureInfo("en-US");
+        RequestLocalizationOptions localizationOption = new RequestLocalizationOptions
+        {
+            DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("en-US"),
+            SupportedCultures = new List<CultureInfo> { enUS },
+            SupportedUICultures = new List<CultureInfo> { enUS }        
+            
+        };
+
+        app.UseRequestLocalization(localizationOption);
+        
+
+
+
+
+
 
 
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
+
         {
             app.UseExceptionHandler("/Home/Error");
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
 
-
-        // 2 => Depois o CreateScope, exatamente onde está esse.
-        // Essa seria a configuração no Startup.cs
         app.Services.CreateScope().ServiceProvider.GetRequiredService<SeedingService>().Seed();
+
+       
+
+
+
+
 
 
 

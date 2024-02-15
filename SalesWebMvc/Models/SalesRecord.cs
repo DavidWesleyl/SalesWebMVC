@@ -2,7 +2,7 @@
 
 namespace SalesWebMvc.Models
 {
-    public class SalesRecord
+    public class SalesRecord // Model Sales Record
     {
 
         public int Id { get; set; }

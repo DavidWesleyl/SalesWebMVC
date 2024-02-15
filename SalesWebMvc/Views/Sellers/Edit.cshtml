@@ -33,7 +33,7 @@
                 <select asp-for="Seller.DepartmentId" asp-items="@(new SelectList(Model.Department,"Id","Name"))" class="form-control"></select>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <button type="button" class="btn btn-success">Save Changes</button>
             </div>
         </form>
     </div>
