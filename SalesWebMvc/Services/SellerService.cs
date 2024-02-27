@@ -19,39 +19,43 @@ namespace SalesWebMvc.Services
 
         }
 
-        public List<Seller> FindAll() // Encontrar e mostrar a lista dos Vendedores do SQLServer
+        public async Task<List<Seller>> FindAll() // Encontrar e mostrar a lista dos Vendedores do SQLServer
         {
-            return _context.Seller.ToList(); // Retornar em formato de lista
+            return await _context.Seller.ToListAsync(); // Retornar em formato de lista
 
         }
-        public void Insert(Seller seller) // Adicionar vendedor ao banco de dados
+        public async Task InsertAsync(Seller seller) // Adicionar vendedor ao banco de dados
         {
 
             _context.Add(seller);
-            _context.SaveChanges(); // Salvar alterações no banco de dados
+            _context.SaveChangesAsync(); // Salvar alterações no banco de dados
         }
 
-        public Seller FindByID(int ID) // Encontrar por ID
+        public async Task<Seller> FindByIDAsync(int ID) // Encontrar por ID
         {
-            return _context.Seller.Include(obj => obj.Department).FirstOrDefault(vendedor => vendedor.Id == ID); // Expressão lambda, para encontrar o "Primeiro ou padrão" vendedor => (que recebe) vendedor.Id seja igual ao ID (Parametro) 
+            return await _context.Seller.Include(obj => obj.Department).FirstOrDefaultAsync(vendedor => vendedor.Id == ID); // Expressão lambda, para encontrar o "Primeiro ou padrão" vendedor => (que recebe) vendedor.Id seja igual ao ID (Parametro) 
         }
 
-        public void Remove(int ID) // Remover por ID
+        public async Task RemoveAsync(int ID) // Remover por ID
         {
-            var objeto = _context.Seller.Find(ID); // variável objeto vai encontrar o vendedor pelp ID
+            var objeto = await _context.Seller.FindAsync(ID); // variável objeto vai encontrar o vendedor pelp ID
 
             _context.Seller.Remove(objeto); // Vai remover
 
-            _context.SaveChanges(); // Salvar alterações no SQL
+            await _context.SaveChangesAsync(); // Salvar alterações no SQL
 
         }
 
 
 
-        public void Update(Seller vendedor) // Método Update | Atualizar informações do Vendedor no Banco de Dados
+        public async Task UpdateAsync(Seller vendedor) // Método Update | Atualizar informações do Vendedor no Banco de Dados
         {
-            if(!_context.Seller.Any(x => x.Id == vendedor.Id))
+            var ifAny = await _context.Seller.AnyAsync(x => x.Id == vendedor.Id);
+
+            
+            if (!ifAny)
             {
+
                 throw new NotFoundException("Id notfound");
 
             }
@@ -59,16 +63,16 @@ namespace SalesWebMvc.Services
             try
             {
                 _context.Update(vendedor);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
             }
 
-            catch(DbUpdateConcurrencyException exception)
+            catch (DbUpdateConcurrencyException exception)
             {
                 throw new DbConcurrencyException(exception.Message);
             }
 
-            
+
         }
 
 
@@ -80,14 +84,14 @@ namespace SalesWebMvc.Services
 
 
 
-      
 
 
 
-            
 
-            
-        }
+
+
 
     }
+
+}
 

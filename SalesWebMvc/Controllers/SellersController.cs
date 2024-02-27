@@ -21,18 +21,18 @@ namespace SalesWebMvc.Controllers
             _departmentService = departmentService;
 
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var list = _sellerService.FindAll();
+            var list = await _sellerService.FindAll();
 
             return View(list);
         }
 
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            var departments = _departmentService.FindAll(); // Busca do DB todos os departamentos
+            var departments = await _departmentService.FindAllAsync(); // Busca do DB todos os departamentos
 
             var viewModel = new SellerFormViewModel { Department = departments };
             return View(viewModel);
@@ -40,17 +40,17 @@ namespace SalesWebMvc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Seller seller)
+        public async Task<IActionResult> Create(Seller seller)
         {
             if(ModelState.IsValid)
             {
-                var departments = _departmentService.FindAll();
+                var departments = await _departmentService.FindAllAsync();
                 var viewModel = new SellerFormViewModel { Seller = seller, Department = departments };
 
                 return View(viewModel);
             }
 
-            _sellerService.Insert(seller);
+            await _sellerService.InsertAsync(seller);
             return RedirectToAction(nameof(Index));
 
 
@@ -59,14 +59,14 @@ namespace SalesWebMvc.Controllers
 
 
         [HttpGet]
-        public IActionResult Delete(int? ID) // O ponto de interrogação significa que é opcional
+        public async Task<IActionResult> Delete(int? ID) // O ponto de interrogação significa que é opcional
         {
             if (ID == null)
             {
                 return RedirectToAction(nameof(Error), new {message = "Id not provider"});
             }
 
-            var objeto = _sellerService.FindByID(ID.Value);
+            var objeto = await _sellerService.FindByIDAsync(ID.Value);
 
             if (objeto == null)
             {
@@ -79,22 +79,22 @@ namespace SalesWebMvc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken] // vai evitar que seja implementado um malware no cadastro
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            _sellerService.Remove(id);
+            await _sellerService.RemoveAsync(id);
             return RedirectToAction(nameof(Index));
 
         }
 
 
-        public IActionResult Details(int? ID)
+        public async Task<IActionResult> Details(int? ID)
         {
             if (ID == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id not provider" });
             }
 
-            var obj = _sellerService.FindByID(ID.Value);
+            var obj = await _sellerService.FindByIDAsync(ID.Value);
 
             if (obj == null)
             {
@@ -104,21 +104,21 @@ namespace SalesWebMvc.Controllers
             return View(obj);
         }
 
-        public IActionResult Edit(int? Id)
+        public async Task<IActionResult> Edit(int? Id)
         {
             if (Id == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id not provider" });
             }
 
-            var vendedorDB = _sellerService.FindByID(Id.Value);
+            var vendedorDB = await _sellerService.FindByIDAsync(Id.Value);
 
             if (vendedorDB == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id not found" });
             }
 
-            List<Department> departments = _departmentService.FindAll(); // Vai retornar uma lista com todos os departamentos do DB
+            List<Department> departments = await _departmentService.FindAllAsync(); // Vai retornar uma lista com todos os departamentos do DB
 
             SellerFormViewModel viewModel = new SellerFormViewModel { Seller = vendedorDB, Department = departments }; // A view de Edit irá retornar as informações dos vendedores e do Departamento
 
@@ -128,12 +128,12 @@ namespace SalesWebMvc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Seller seller)
+        public async Task<IActionResult> Edit(int id, Seller seller)
         {
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var departments = _departmentService.FindAll();
+                var departments = await _departmentService.FindAllAsync();
                 var viewModel = new SellerFormViewModel { Seller = seller, Department = departments };
 
                 return View(viewModel);
@@ -145,7 +145,7 @@ namespace SalesWebMvc.Controllers
             }
             try
             {
-                _sellerService.Update(seller);
+                await _sellerService.UpdateAsync(seller);
                 return RedirectToAction(nameof(Index));
             }
             
@@ -159,6 +159,7 @@ namespace SalesWebMvc.Controllers
             {
                 return RedirectToAction(nameof(Error), new { message = DbErrorMessage.Message});
             }
+
         }
 
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SalesWebMvc.Data;
 using SalesWebMvc.Models;
+using System.Threading.Tasks;
 
 namespace SalesWebMvc.Services
 {
@@ -12,9 +13,9 @@ namespace SalesWebMvc.Services
             _context = context;
         }
 
-        public List<Department> FindAll()
+        public async Task<List<Department>> FindAllAsync() // otimizando a operação FindAll sincrona em Assincrona 
         {
-            return _context.Department.OrderBy(x => x.Name).ToList();
+            return await _context.Department.OrderBy(x => x.Name).ToListAsync(); // mudamos o to list que era uma operação sincrona para ToListAsync(), e adicionamos o Await informando que é uma operação assíncrona
             
 
         }
