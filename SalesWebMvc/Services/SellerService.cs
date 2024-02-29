@@ -28,7 +28,7 @@ namespace SalesWebMvc.Services
         {
 
             _context.Add(seller);
-            _context.SaveChangesAsync(); // Salvar alterações no banco de dados
+            await _context.SaveChangesAsync(); // Salvar alterações no banco de dados
         }
 
         public async Task<Seller> FindByIDAsync(int ID) // Encontrar por ID
