@@ -27,6 +27,8 @@ internal class Program
 
         builder.Services.AddScoped<DepartmentService>();
 
+        builder.Services.AddScoped<SalesRecordService>();
+
         var app = builder.Build();
 
         // Configuração de Idioma do Sistema
